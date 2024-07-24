@@ -1,6 +1,8 @@
 <template>
   <div class="quiz">
-    <h1>{{ question.text }}</h1>
+    <h1 class="text-8xl text-center text-white bold mb-3">
+      {{ question.text }}
+    </h1>
     <ul>
       <li v-for="(option, index) in question.options" :key="index">
         <button @click="handleClick(index)">{{ option }}</button>

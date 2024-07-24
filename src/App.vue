@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <h2>Score: {{ score }}</h2>
+  <div class="" id="app">
+    <h2 class="text-4xl mb-1">⭐️ Score: {{ score }}</h2>
     <Quiz
       v-if="currentQuestionIndex < questions.length"
       :question="questions[currentQuestionIndex]"
@@ -35,17 +35,22 @@ export default {
       wrongs_words: [],
     };
   },
-  created() {
-    this.loadQuestions();
+  async created() {
+    this.questions = [
+      ...(await this.loadQuestions("/eng.json")),
+      ...(await this.loadQuestions("/ch.json")),
+    ];
+    this.questions.sort(() => 0.5 - Math.random());
   },
   methods: {
-    async loadQuestions() {
+    async loadQuestions(_json) {
+      let result = [];
       try {
-        const response = await axios.get("/english-vocabulary-json.json");
+        const response = await axios.get(_json);
         const data = response.data;
 
         const randomItems = this.getRandomItems(data, 300);
-        this.questions = randomItems.map((item) => {
+        result = randomItems.map((item) => {
           const { english_word, chinese_word } = item;
           const options = [english_word];
 
@@ -63,6 +68,8 @@ export default {
             correctIndex: options.indexOf(english_word),
           };
         });
+
+        return result;
       } catch (error) {
         console.error("Error loading questions:", error);
       }
@@ -90,7 +97,7 @@ export default {
       this.score++;
     },
     decrementScore() {
-      this.score -= 2;
+      this.score -= 6;
     },
     checkAnswer(index) {
       if (index === this.questions[this.currentQuestionIndex].correctIndex) {
@@ -122,7 +129,7 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
   color: #fff;
-  min-width: 30vw;
+  min-width: 45vw;
   background-color: dimgrey;
 }
 </style>
