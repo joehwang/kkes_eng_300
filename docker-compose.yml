@@ -1,0 +1,10 @@
+version: "3"
+services:
+  nginx:
+    image: joehwang/ching-ting-eng-game:v1
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ./dist:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
